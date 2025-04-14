@@ -1,0 +1,74 @@
+Definition:-
+The Singleton Design Pattern ensures that a class has only one instance, while providing a global point of access to that instance.
+This pattern is particularly useful when you need to control access to shared resources, such as database connections, throughout the application.
+
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class DatabaseConnectionManager {
+    static private DatabaseConnectionManager dbManager = null;
+    private Connection con = null;
+    private String url;
+    private String user;
+    private String password;
+
+    // Private constructor to instantiation
+    private DatabaseConnectionManager(String url, String user, String password) {
+        this.url = url;
+        this.user = user;
+        this.password = password;
+    }
+
+    // method to retrieve the single instance of DatabaseConnectionManager
+    public static synchronized DatabaseConnectionManager getDbConnectionManager(String url, String user,
+            String password) {
+        if (dbManager == null) {
+            dbManager = new DatabaseConnectionManager(url, user, password);
+        }
+        return dbManager;
+    }
+
+    // Method to return the connection instance
+    public synchronized Connection getConnection() throws SQLException {
+        if (con == null || con.isClosed()) {
+            con = DriverManager.getConnection(url, user, password);
+        }
+        return con;
+    }
+
+    // Method to close the connection
+    public synchronized void closeConnection() throws SQLException {
+        if (con != null) {
+            con.close();
+            con = null;
+        }
+    }
+}
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public class Main {
+    public static void main(String[] args) throws SQLException {
+        DatabaseConnectionManager dbManager = null;
+        Connection con = null;
+
+        // Build the Connection
+        String url = "jdbc:mysql://localhost:3306/school";
+        String user = "root";
+        String password = "455445";
+        dbManager = DatabaseConnectionManager.getDbConnectionManager(url, user, password);
+        con = dbManager.getConnection();
+
+        if (con != null) {
+            System.out.println("Database connection established Successfully!");
+        } else {
+            System.out.println("Failed to establish database connection.");
+        }
+
+        // Close the Connection
+        dbManager.closeConnection();
+    }
+}
