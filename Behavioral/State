@@ -1,0 +1,101 @@
+Definition:-
+the State Pattern is applied to model the states of water in its different forms: Liquid (Water), Solid (Ice), and Gas (Steam).
+The WaterContext class changes its state between these forms based on actions like heating or cooling.
+
+
+public interface LiquidState{
+    void heat(WaterContext context);
+    void cool(WaterContext context);
+    void displayState();
+}
+
+public class LiquidStateWater implements LiquidState {
+    @Override
+    public void heat(WaterContext context) {
+        context.setState(new LiquidStateSteam());
+        System.out.println("Water boiled to Steam.");
+    }
+
+    @Override
+    public void cool(WaterContext context) {
+        context.setState(new LiquidStateIce());
+        System.out.println("Water froze to Ice.");
+    }
+
+    @Override
+    public void displayState() {
+        System.out.println("State: Liquid (Water)");
+    }
+}
+
+public class LiquidStateIce implements LiquidState {
+    @Override
+    public void heat(WaterContext context) {
+        context.setState(new LiquidStateWater());
+        System.out.println("Ice melted to Water.");
+    }
+
+    @Override
+    public void cool(WaterContext context) {
+        System.out.println("Already Ice.");
+    }
+
+    @Override
+    public void displayState() {
+        System.out.println("State: Solid (Ice)");
+    }
+}
+
+public class LiquidStateSteam implements LiquidState {
+    @Override
+    public void heat(WaterContext context) {
+        System.out.println("Already Steam.");
+    }
+
+    @Override
+    public void cool(WaterContext context) {
+        context.setState(new LiquidStateWater());
+        System.out.println("Steam condensed to Water.");
+    }
+
+    @Override
+    public void displayState() {
+        System.out.println("State: Gas (Steam)");
+    }
+}
+
+public class WaterContext {
+    private LiquidState currentState;
+
+    public WaterContext() {
+        currentState = new LiquidStateWater();
+    }
+
+    public void setState(LiquidState currentState) {
+        this.currentState = currentState;
+    }
+
+    public void heat() {
+        currentState.heat(this); // pass context
+    }
+
+    public void cool() {
+        currentState.cool(this); // pass context
+    }
+
+    public void display() {
+        currentState.displayState();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        WaterContext context = new WaterContext();
+        context.display();
+        context.heat();
+        context.display();
+        context.cool();
+        context.display();
+        context.cool();
+    }
+}
