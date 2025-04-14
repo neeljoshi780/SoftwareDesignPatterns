@@ -1,0 +1,214 @@
+Definition:-
+the Proxy Pattern is applied to control access to file operations based on user permissions (admin vs. non-admin).
+The FileOperationProxy class controls access to file-related operations (create, delete, rename) by the user and delegates the actual tasks to the FileOperation class.
+
+
+public abstract class FileManager {
+    public abstract void createDir(String dName);
+
+    public abstract void deleteDir(String dName);
+
+    public abstract void reNameDir(String oldName, String newName);
+
+    public abstract void createFile(String fName);
+
+    public abstract void deleteFile(String fName);
+
+    public abstract void reNameFile(String oldName, String newName);
+}
+
+import java.io.File;
+import java.io.IOException;
+
+public class FileOperation extends FileManager {
+    File dir;
+    File file;
+
+    // Create Directory
+    @Override
+    public void createDir(String dName) {
+        dir = new File(dName);
+        if (!dir.exists()) {
+            dir.mkdir();
+            System.out.println(dName + " Directory Created Successfull.");
+        } else {
+            System.out.println(dName + " Directory already exists.");
+        }
+    }
+
+    // Delete Directory
+    @Override
+    public void deleteDir(String dName) {
+        dir = new File(dName);
+        if (dir.exists()) {
+            dir.delete();
+            System.out.println(dName + " Directory Deleting Successfull.");
+        } else {
+            System.out.println(dName + " Directory does not exist.");
+        }
+    }
+
+    // ReName Directory
+    @Override
+    public void reNameDir(String oldName, String newName) {
+        dir = new File(oldName);
+        File newDir = new File(newName);
+
+        if (dir.exists()) {
+            dir.renameTo(newDir);
+            System.out.println(oldName + " Directory name change to: " + newName);
+        } else {
+            System.out.println(oldName + " Directory does not exist.");
+        }
+    }
+
+    // Create File
+    @Override
+    public void createFile(String fName) {
+        file = new File(fName);
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+                System.out.println(fName + " File Created Successfull.");
+            } else {
+                System.out.println(fName + " File does not exist.");
+            }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    // Delete File
+    @Override
+    public void deleteFile(String fName) {
+        file = new File(fName);
+
+        if (file.exists()) {
+            file.delete();
+            System.out.println(fName + " File Deleting Successfull.");
+        } else {
+            System.out.println(fName + " File does not exist.");
+        }
+    }
+
+    // ReName File
+    @Override
+    public void reNameFile(String oldName, String newName) {
+        file = new File(oldName);
+        File newFile = new File(newName);
+
+        if (file.exists()) {
+            file.renameTo(newFile);
+            System.out.println(oldName + " File name change to: " + newName);
+        } else {
+            System.out.println(oldName + " File does not exist.");
+        }
+    }
+}
+
+public class FileOperationProxy extends FileManager {
+    FileOperation fo = null;
+    boolean isAdmin;
+
+    public FileOperationProxy(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
+    // Create Directory
+    @Override
+    public void createDir(String dName) {
+        if (fo == null) {
+            fo = new FileOperation();
+        }
+
+        if (isAdmin) {
+            fo.createDir(dName);
+        } else {
+            System.out.println("Access Denid: Only Admin Create Directory.");
+        }
+    }
+
+    // Delete Directory
+    @Override
+    public void deleteDir(String dName) {
+        if (fo == null) {
+            fo = new FileOperation();
+        }
+
+        if (isAdmin) {
+            fo.deleteDir(dName);
+        } else {
+            System.out.println("Access Denid: Only Admin Delete Directory.");
+        }
+    }
+
+    // ReName Directory
+    @Override
+    public void reNameDir(String oldName, String newName) {
+        if (fo == null) {
+            fo = new FileOperation();
+        }
+
+        if (isAdmin) {
+            fo.reNameDir(oldName, newName);
+        } else {
+            System.out.println("Access Denid: Only Admin ReName Directory.");
+        }
+    }
+
+    // Create File
+    @Override
+    public void createFile(String fName) {
+        if (fo == null) {
+            fo = new FileOperation();
+        }
+
+        if (isAdmin) {
+            fo.createFile(fName);
+        } else {
+            System.out.println("Access Denid: Only Admin Create File.");
+        }
+    }
+
+    // Delete File
+    public void deleteFile(String fName) {
+        if (fo == null) {
+            fo = new FileOperation();
+        }
+
+        if (isAdmin) {
+            fo.deleteFile(fName);
+        } else {
+            System.out.println("Access Denid: Only Admin Delete File.");
+        }
+    }
+
+    // ReName File
+    public void reNameFile(String oldName, String newName) {
+        if (fo == null) {
+            fo = new FileOperation();
+        }
+
+        if (isAdmin) {
+            fo.reNameFile(oldName, newName);
+        } else {
+            System.out.println("Access Denid: Only Admin ReName File.");
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        FileOperationProxy fop = new FileOperationProxy(true);
+
+        // Directory Operation(Create,Delete,ReName)
+        //fop.createDir("Learn Java");
+        //fop.deleteDir("Learn Java");
+        //fop.reNameDir("Learn Java", "Learn Python");
+
+        // File Operation(Create,Delete,ReName)
+        //fop.createFile("test.txt");
+        //fop.deleteFile("test.txt");
+        //fop.reNameFile("test.txt", "test.c");
+    }
+}
