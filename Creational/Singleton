@@ -1,4 +1,3 @@
-Definition:-
 The Singleton Design Pattern ensures that a class has only one instance, while providing a global point of access to that instance.
 This pattern is particularly useful when you need to control access to shared resources, such as database connections, throughout the application.
 
