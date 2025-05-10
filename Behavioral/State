@@ -2,6 +2,8 @@ the State Pattern is applied to model the states of water in its different forms
 The WaterContext class changes its state between these forms based on actions like heating or cooling.
 
 
+Example1:-
+
 public interface LiquidState{
     void heat(WaterContext context);
     void cool(WaterContext context);
@@ -96,5 +98,76 @@ public class Main {
         context.cool();
         context.display();
         context.cool();
+    }
+}
+
+Example2:-
+
+public interface TrafficSignalState {
+    void next(TrafficSignalContext context);
+
+    void showSignal();
+}
+
+public class RedState implements TrafficSignalState {
+    @Override
+    public void next(TrafficSignalContext context) {
+        context.setState(new GreenState());
+    }
+
+    @Override
+    public void showSignal() {
+        System.out.println("Red Light - STOP");
+    }
+}
+
+public class GreenState implements TrafficSignalState {
+    @Override
+    public void next(TrafficSignalContext context) {
+        context.setState(new YellowState());
+    }
+
+    @Override
+    public void showSignal() {
+        System.out.println("Green Light - GO");
+    }
+}
+
+public class YellowState implements TrafficSignalState {
+    @Override
+    public void next(TrafficSignalContext context) {
+        context.setState(new RedState());
+    }
+
+    @Override
+    public void showSignal() {
+        System.out.println("Yellow Light - SLOW DOWN");
+    }
+}
+
+public class TrafficSignalContext {
+    private TrafficSignalState currentState;
+
+    public TrafficSignalContext() {
+        currentState = new RedState(); // initial state
+    }
+
+    public void setState(TrafficSignalState currentState) {
+        this.currentState = currentState;
+    }
+
+    public void change() {
+        currentState.next(this);
+    }
+
+    public void display() {
+        currentState.showSignal();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        TrafficSignalContext context = new TrafficSignalContext();
+        context.display();
     }
 }
