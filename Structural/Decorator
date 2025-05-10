@@ -3,6 +3,8 @@ It is used to extend the behavior of objects in a flexible and reusable way.
 This pattern involves creating a set of decorator classes that are used to wrap concrete components.
 
 
+Example1:-
+
 public abstract class IceCream {
     public abstract double getCost();
 
@@ -86,5 +88,115 @@ public class Main {
         ice = new CoconutDecorator(ice);
         System.out.println("Price: " + ice.getCost());
         System.out.println("Description: " + ice.getDescription());
+    }
+}
+
+
+Example2:-
+
+import java.io.IOException;
+import java.io.InputStream;
+
+public class LoggingInputStream extends InputStream {
+    private InputStream ips;
+    private int countChar = 0;
+    private int countWord = 0;
+    private int countLine = 0;
+    private boolean isWord = false;
+
+    public LoggingInputStream(InputStream ips) {
+        this.ips = ips;
+    }
+
+    @Override
+    public int read() throws IOException {
+        int bdata = ips.read();
+
+        if (bdata != -1) {
+            char ch = (char) bdata;
+            countChar++;
+
+            if (bdata == '\n') {
+                countLine++;
+            }
+
+            if (Character.isWhitespace(ch)) {
+                isWord = false;
+            } else if (!isWord) {
+                countWord++;
+                isWord = true;
+            }
+        }
+
+        return bdata;
+    }
+
+    public void display() {
+        System.out.println("Total Characters: " + countChar);
+        System.out.println("Total Words: " + countWord);
+        System.out.println("Total Lines: " + (countLine + 1));
+    }
+
+    @Override
+    public void close() throws IOException {
+        ips.close();
+    }
+}
+
+import java.io.IOException;
+import java.io.OutputStream;
+
+public class LoggingOutputStream extends OutputStream {
+    private OutputStream ops;
+    private int countBytes = 0;
+
+    public LoggingOutputStream(OutputStream ops) {
+        this.ops = ops;
+    }
+
+    @Override
+    public void write(int b) throws IOException {
+        countBytes++;
+        ops.write(b);
+    }
+
+    public void display() {
+        System.out.println("Total Bytes Write: " + countBytes);
+    }
+
+    @Override
+    public void close() throws IOException {
+        ops.close();
+    }
+}
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            // Write the Data OutPutStream
+            String msg = "Om Namah Shivay";
+            OutputStream os = new FileOutputStream("Test.txt");
+            LoggingOutputStream lo = new LoggingOutputStream(os);
+            lo.write(msg.getBytes());
+            lo.display();
+            lo.close();
+
+            // Read the Data InputStream
+            InputStream is = new FileInputStream("Test.txt");
+            LoggingInputStream li = new LoggingInputStream(is);
+
+            while (li.read() != -1)
+                ;
+            li.display();
+            li.close();
+        } catch (IOException ie) {
+            System.err.println(ie.getMessage());
+        }
     }
 }
