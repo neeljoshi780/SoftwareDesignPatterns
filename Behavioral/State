@@ -1,4 +1,3 @@
-Definition:-
 the State Pattern is applied to model the states of water in its different forms: Liquid (Water), Solid (Ice), and Gas (Steam).
 The WaterContext class changes its state between these forms based on actions like heating or cooling.
 
