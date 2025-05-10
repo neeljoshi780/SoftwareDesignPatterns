@@ -1,4 +1,3 @@
-Definition:-
 the Proxy Pattern is applied to control access to file operations based on user permissions (admin vs. non-admin).
 The FileOperationProxy class controls access to file-related operations (create, delete, rename) by the user and delegates the actual tasks to the FileOperation class.
 
