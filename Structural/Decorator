@@ -1,0 +1,90 @@
+Decorator Design Pattern is a structural pattern that allows you to add new functionality to an object dynamically without altering its structure.
+It is used to extend the behavior of objects in a flexible and reusable way.
+This pattern involves creating a set of decorator classes that are used to wrap concrete components.
+
+
+public abstract class IceCream {
+    public abstract double getCost();
+
+    public abstract String getDescription();
+}
+
+public class Strawberry extends IceCream {
+    @Override
+    public double getCost() {
+        return 100;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Strawberry Icream";
+    }
+}
+
+public abstract class Decorator extends IceCream {
+    private IceCream ice;
+
+    public Decorator(IceCream ice) {
+        this.ice = ice;
+    }
+
+    @Override
+    public double getCost() {
+        return ice.getCost();
+    }
+
+    @Override
+    public String getDescription() {
+        return ice.getDescription();
+    }
+}
+
+public class CoconutDecorator extends Decorator {
+    public CoconutDecorator(IceCream ice) {
+        super(ice);
+    }
+
+    @Override
+    public double getCost() {
+        return super.getCost() + 50;
+    }
+
+    @Override
+    public String getDescription() {
+        return super.getDescription() + " With Coconut";
+    }
+}
+
+public class PeanutDecorator extends Decorator {
+    public PeanutDecorator(IceCream ice) {
+        super(ice);
+    }
+
+    @Override
+    public double getCost() {
+        return super.getCost() + 30;
+    }
+
+    @Override
+    public String getDescription() {
+        return super.getDescription() + " With Peanut";
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        // Strawberry IceCream
+        IceCream ice = new Strawberry();
+
+        // Strawberry IceCream With Peanut
+        IceCream peanutStrawberry = new PeanutDecorator(ice);
+        System.out.println("Price: " + peanutStrawberry.getCost());
+        System.out.println("Description: " + peanutStrawberry.getDescription());
+
+        // Strawberry IceCream With Coconut
+        ice = new CoconutDecorator(ice);
+        System.out.println("Price: " + ice.getCost());
+        System.out.println("Description: " + ice.getDescription());
+    }
+}
