@@ -1,0 +1,125 @@
+Abstract Factory Design Pattern is a creational pattern that allows for the creation of families of related objects (like different types of food courses)
+without specifying their concrete classes. It provides an interface for creating families of related or dependent objects, and each concrete factory is
+responsible for creating objects of a specific type (e.g., Indian or Chinese dishes). This ensures that the client only interacts with the abstract factory
+and its abstract products, promoting loose coupling.
+
+
+public abstract class Appetizer {
+    public abstract String serve();
+}
+
+public abstract class MainCourse {
+    public abstract String serve();
+}
+
+public abstract class Dessert {
+    public abstract String serve();
+}
+
+public class IndianAppetizer extends Appetizer {
+    @Override
+    public String serve() {
+        return "Serving Indian Appetizer: Samosa";
+    }
+}
+
+public class IndianMainCourse extends MainCourse {
+    @Override
+    public String serve() {
+        return "Serving Indian Main Course: Butter Chicken";
+    }
+}
+
+public class IndianDessert extends Dessert {
+    @Override
+    public String serve() {
+        return "Serving Indian Dessert: Gulab Jamun";
+    }
+}
+
+public class ChineseAppetizer extends Appetizer {
+    public String serve() {
+        return "Serving Chinese Appetizer: Spring Rolls";
+    }
+}
+
+public class ChineseMainCourse extends MainCourse {
+    @Override
+    public String serve() {
+        return "Serving Chinese Main Course: Kung Pao Chicken";
+    }
+}
+
+public class ChineseDessert extends Dessert {
+    @Override
+    public String serve() {
+        return "Serving Chinese Dessert: Mango Pudding";
+    }
+}
+
+public abstract class AbstractFactory {
+    public abstract MainCourse getMainCourse();
+
+    public abstract Appetizer getAppetizer();
+
+    public abstract Dessert getDessert();
+
+    public static AbstractFactory getFactory(String dish) {
+        switch (dish.toLowerCase()) {
+            case "indian":
+                return new IndianFactory();
+            case "chinese":
+                return new ChineseFactory();
+            default:
+                throw new IllegalArgumentException("Not Available in this type of dish: " + dish);
+        }
+    }
+}
+
+public class IndianFactory extends AbstractFactory {
+    @Override
+    public MainCourse getMainCourse() {
+        return new IndianMainCourse();
+    }
+
+    @Override
+    public Appetizer getAppetizer() {
+        return new IndianAppetizer();
+    }
+
+    @Override
+    public Dessert getDessert() {
+        return new IndianDessert();
+    }
+}
+
+public class ChineseFactory extends AbstractFactory {
+    @Override
+    public MainCourse getMainCourse() {
+        return new ChineseMainCourse();
+    }
+
+    @Override
+    public Appetizer getAppetizer() {
+        return new ChineseAppetizer();
+    }
+
+    @Override
+    public Dessert getDessert() {
+        return new ChineseDessert();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            // Get Indian Factory
+            AbstractFactory indian = AbstractFactory.getFactory("indian");
+            MainCourse maincourse = indian.getMainCourse();
+
+            System.out.println(maincourse.serve());
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+}
