@@ -1,0 +1,83 @@
+Facade Design Pattern is a structural pattern that provides a simplified interface to a complex subsystem.
+It hides the complexities of the system and provides a unified interface to the client.
+
+
+public class DVDPlayer {
+    public void on() {
+        System.out.println("DVD Player ON");
+    }
+
+    public void play(String movie) {
+        System.out.println("Playing movie: " + movie);
+    }
+
+    public void off() {
+        System.out.println("DVD Player OFF");
+    }
+}
+
+public class Projector {
+    public void on() {
+        System.out.println("Projector ON");
+    }
+
+    public void setMode(String mode) {
+        System.out.println("Projector set to " + mode + " mode");
+    }
+
+    public void OFF() {
+        System.out.println("Projector OFF");
+    }
+}
+
+public class SoundSystem {
+    public void on() {
+        System.out.println("Sound System ON");
+    }
+
+    public void setVolume(int level) {
+        System.out.println("Volume set to " + level);
+    }
+
+    public void off() {
+        System.out.println("Sound System OFF");
+    }
+}
+
+public class HomeTheaterFacade {
+    private DVDPlayer dvd;
+    private Projector projector;
+    private SoundSystem sound;
+
+    public HomeTheaterFacade() {
+        this.dvd = new DVDPlayer();
+        this.projector = new Projector();
+        this.sound = new SoundSystem();
+    }
+
+    public void watchMovie(String movie) {
+        System.out.println("Get ready to watch a movie...");
+        projector.on();
+        projector.setMode("Cinema");
+        dvd.on();
+        dvd.play(movie);
+        sound.on();
+        sound.setVolume(8);
+    }
+
+    public void endMovie() {
+        System.out.println("Shutting down movie theater...");
+        dvd.off();
+        sound.off();
+        projector.OFF();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        HomeTheaterFacade homeTheaterFacade = new HomeTheaterFacade();
+        homeTheaterFacade.watchMovie("Ramayan");
+        homeTheaterFacade.endMovie();
+    }
+}
