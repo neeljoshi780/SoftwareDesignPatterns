@@ -1,0 +1,101 @@
+Factory Design Pattern creates objects based on a specified type without exposing the creation logic to the client.
+It is useful when different types of objects need to be instantiated based on certain conditions, such as user input.
+In a database connection scenario, the Factory pattern allows the creation of different database connections (e.g., MySQL, PostgreSQL) by
+simply passing the type to the factory, ensuring flexibility and separation of concerns.
+
+
+public abstract class DatabaseConnection {
+    public abstract void connect();
+
+    public abstract void disconnect();
+}
+
+public class MySQL extends DatabaseConnection {
+    @Override
+    public void connect() {
+        System.out.println("Connected to MySQL Database");
+    }
+
+    @Override
+    public void disconnect() {
+        System.out.println("Connection is Closed");
+    }
+}
+
+public class MsSQL extends DatabaseConnection {
+    @Override
+    public void connect() {
+        System.out.println("Connected to MsSQL Database");
+    }
+
+    @Override
+    public void disconnect() {
+        System.out.println("Connection is Closed");
+    }
+}
+
+public class PostgreSQL extends DatabaseConnection {
+    @Override
+    public void connect() {
+        System.out.println("Connected to PostgreSQL Database");
+    }
+
+    @Override
+    public void disconnect() {
+        System.out.println("Connection is Closed");
+    }
+}
+
+public class MongoDB extends DatabaseConnection {
+    @Override
+    public void connect() {
+        System.out.println("Connected to MongoDB Database");
+    }
+
+    @Override
+    public void disconnect() {
+        System.out.println("Connection is Closed");
+    }
+}
+
+public class DatabaseFactory {
+    public static DatabaseConnection getDatabaseConnection(String dbType) {
+        switch (dbType.toLowerCase()) {
+            case "mysql":
+                return new MySQL();
+            case "mssql":
+                return new MsSQL();
+            case "postgresql":
+                return new PostgreSQL();
+            case "mongodb":
+                return new MongoDB();
+            default:
+                throw new IllegalArgumentException("Unsupported Database: " + dbType);
+        }
+    }
+}
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        DatabaseConnection con = null;
+
+        System.out.println("Enter the type of database (MySQL, MsSQL, PostgreSQL, MongoDB): ");
+        String dbType = sc.next();
+
+        try {
+            // Build the Connection
+            con = DatabaseFactory.getDatabaseConnection(dbType);
+            con.connect();
+
+            // Disconnect the Database Connection
+            con.disconnect();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+
+        sc.close();
+    }
+}
