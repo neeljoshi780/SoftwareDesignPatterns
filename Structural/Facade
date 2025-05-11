@@ -1,5 +1,6 @@
-Facade Design Pattern is a structural pattern that provides a simplified interface to a complex subsystem.
-It hides the complexities of the system and provides a unified interface to the client.
+This Java program demonstrates the Facade Design Pattern by creating a simplified interface (HomeTheaterFacade) to control a complex system of home theater
+components — DVD Player, Projector, and Sound System. The Facade hides the complexity of these subsystems and provides an easy-to-use method for clients to
+watch and stop a movie.
 
 
 public class DVDPlayer {
