@@ -1,0 +1,77 @@
+This Java program demonstrates the Chain of Responsibility (CoR) Design Pattern using a simple example to classify whether a number is zero, positive, or negative.
+In this pattern, multiple handler classes are linked together in a chain, and a request (in this case, an integer number) is passed along the chain.
+Each handler decides if it can process the request or pass it to the next handler.
+
+
+abstract class NumberHandler {
+    public abstract void setNextHandler(NumberHandler numberHandler);
+
+    public abstract void handel(int number);
+}
+
+public class ZeroHandler extends NumberHandler {
+    NumberHandler nextHandler;
+
+    @Override
+    public void setNextHandler(NumberHandler nextHandler) {
+        this.nextHandler = nextHandler;
+    }
+
+    @Override
+    public void handel(int number) {
+        if (number == 0) {
+            System.out.println("Number is Zero.");
+        } else {
+            nextHandler.handel(number);
+        }
+    }
+}
+
+public class PositiveHandler extends NumberHandler {
+    NumberHandler nextHandler;
+
+    @Override
+    public void setNextHandler(NumberHandler nextHandler) {
+        this.nextHandler = nextHandler;
+    }
+
+    @Override
+    public void handel(int number) {
+        if (number > 0) {
+            System.out.println("Number is Positive.");
+        } else {
+            nextHandler.handel(number);
+        }
+    }
+}
+
+public class NegativeHandler extends NumberHandler {
+    NumberHandler nextHandler;
+
+    @Override
+    public void setNextHandler(NumberHandler nextHandler) {
+    }
+
+    @Override
+    public void handel(int number) {
+        if (number < 0) {
+            System.out.println("Number is Negative.");
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Create of Chain
+        NegativeHandler negativeHandler = new NegativeHandler();
+        PositiveHandler positiveHandler = new PositiveHandler();
+        ZeroHandler zeroHandler = new ZeroHandler();
+        
+        // Chain them: Zero -> Positive -> Negative
+        zeroHandler.setNextHandler(positiveHandler);
+        positiveHandler.setNextHandler(negativeHandler);
+        
+        // Test
+        zeroHandler.handel(-3);
+    }
+}
