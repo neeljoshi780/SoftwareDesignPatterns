@@ -1,0 +1,75 @@
+This Java program demonstrates the Observer Design Pattern, where a Youtube channel (the Subject) maintains a list of Subscriber objects (the Observers).
+Whenever the channel uploads a new video, it notifies all its subscribers automatically by calling their update() method. This pattern promotes loose coupling
+between the channel and its subscribers, allowing dynamic registration and unregistration of observers at runtime.
+
+
+public abstract class Observer {
+    String subscriberName;
+    public abstract void update(String chanelName, String title);
+}
+
+public class Subscriber extends Observer {
+    public Subscriber(String subscriberName) {
+        this.subscriberName = subscriberName;
+    }
+
+    @Override
+    public void update
+    (String chanelName, String title) {
+        System.out.println("Hello "+subscriberName+" "+chanelName + " just uploaded a new video: " + title);
+    }
+}
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Youtube {
+
+    private String channelName;
+    public List<Observer> subscribers = new ArrayList<>();
+
+    public Youtube(String channelName) {
+        this.channelName = channelName;
+    }
+
+    public void subscribe(Observer ob) {
+        int index = subscribers.indexOf(ob);
+        if (index == -1) {
+            this.subscribers.add(ob);
+        }
+    }
+
+    public void unSubscribe(Observer ob) {
+        int index = subscribers.indexOf(ob);
+        if (index >= 0) {
+            this.subscribers.remove(index);
+        }
+    }
+
+    private void notified(String title) {
+        for (Observer ob : this.subscribers) {
+            ob.update(channelName, title);
+        }
+    }
+
+    public void newUploadVideo(String title) {
+        notified(title);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Youtube mysirg = new Youtube("MySirG");
+
+        Observer user1 = new Subscriber("Neel");
+        Observer user2 = new Subscriber("Gautam");
+        Observer user3 = new Subscriber("Jay");
+
+        mysirg.subscribe(user1);
+        mysirg.subscribe(user2);
+        mysirg.subscribe(user3);
+        mysirg.newUploadVideo("Java Tutorials");
+        mysirg.unSubscribe(user3);
+        mysirg.newUploadVideo("Paython Tutorials");
+    }
+}
