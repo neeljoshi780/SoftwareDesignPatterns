@@ -1,6 +1,5 @@
-Decorator Design Pattern is a structural pattern that allows you to add new functionality to an object dynamically without altering its structure.
-It is used to extend the behavior of objects in a flexible and reusable way.
-This pattern involves creating a set of decorator classes that are used to wrap concrete components.
+This Java program demonstrates the Decorator Design Pattern using an ice cream example. The purpose of the Decorator pattern is to add new functionalities or
+behaviors to an object dynamically without changing its original structure or class.
 
 
 Example1:-
@@ -90,6 +89,10 @@ public class Main {
         System.out.println("Description: " + ice.getDescription());
     }
 }
+
+
+This Java program demonstrates the use of custom stream wrappers (LoggingInputStream and LoggingOutputStream) that extend InputStream and OutputStream respectively.
+These classes are designed to log information about the data being read or written.
 
 
 Example2:-
