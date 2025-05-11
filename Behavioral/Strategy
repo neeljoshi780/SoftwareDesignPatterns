@@ -1,0 +1,65 @@
+This Java program demonstrates the Strategy Design Pattern, where different payment methods (like Credit Card and UPI) are implemented as interchangeable strategies.
+The pattern allows the program to select a payment algorithm at runtime, promoting flexibility and scalability without modifying existing classes.
+
+
+public abstract class PaymentStrategy {
+    public abstract void pay(double amount);
+}
+
+public class CreditCardPayment extends PaymentStrategy {
+    private String cardNumber;
+
+    public CreditCardPayment(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    @Override
+    public void pay(double amount) {
+        System.out.println("Paid ₹" + amount + " using Credit Card: " + cardNumber);
+    }
+}
+
+public class UpiPayment extends PaymentStrategy {
+    private String upiId;
+
+    public UpiPayment(String upiId) {
+        this.upiId = upiId;
+    }
+
+    @Override
+    public void pay(double amount) {
+        System.out.println("Paid ₹" + amount + " using UPI: " + upiId);
+    }
+}
+
+public class PaymentContext {
+    PaymentStrategy paymentStrategy;
+
+    public void setPaymentStretegy(PaymentStrategy paymentStrategy) {
+        this.paymentStrategy = paymentStrategy;
+    }
+
+    public void payAmount(double amount) {
+        if (paymentStrategy == null) {
+            System.out.println("No payment method selected.");
+        } else {
+            paymentStrategy.pay(amount);
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        PaymentStrategy creditCardPayment = new CreditCardPayment("123456");
+        PaymentStrategy upiPayment = new UpiPayment("abc@123");
+        PaymentContext paymentContext = new PaymentContext();
+
+        // CreditCard Payment
+        paymentContext.setPaymentStretegy(creditCardPayment);
+        paymentContext.payAmount(5000);
+
+        // Upi Payment
+        paymentContext.setPaymentStretegy(upiPayment);
+        paymentContext.payAmount(1000);
+    }
+}
