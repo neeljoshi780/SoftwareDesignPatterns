@@ -101,6 +101,11 @@ public class Main {
     }
 }
 
+
+This Java program demonstrates the State Design Pattern through a traffic signal system. The traffic light changes states (Red, Green, Yellow) depending on the
+current state, with each state having a specific behavior. The State Pattern allows an object to change its behavior when its internal state changes.
+
+
 Example2:-
 
 public interface TrafficSignalState {
